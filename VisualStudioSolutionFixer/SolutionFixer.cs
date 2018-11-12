@@ -157,7 +157,7 @@ namespace VisualStudioSolutionFixer
         /// <returns>All projects that this tool supports.</returns>
         internal static IEnumerable<string> GetProjectsInDirectory(string targetDirectory)
         {
-            HashSet<string> supportedFileExtensions = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase) { ".csproj", ".vbproj", ".synproj" };
+            HashSet<string> supportedFileExtensions = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase) { ".csproj", ".vbproj", ".synproj", ".fsproj" };
 
             return
                 Directory
