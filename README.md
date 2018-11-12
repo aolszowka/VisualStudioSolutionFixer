@@ -20,6 +20,8 @@ If one of these files does not exist at the specified location the tool will:
 
 Because the tooling operates on the ProjectGuid the name of the project can change completely so long as the project is found within the specified directory.
 
+**NOTE** This tool will only fix Solution Files; you most likely need to fix all of the Project Files as well. For that see the sister tool https://github.com/aolszowka/MsBuildProjectReferenceFixer
+
 ## Usage
 ```
 Usage: VisualStudioSolutionFixer.exe [validateDirectory] directoryToOperateOn
