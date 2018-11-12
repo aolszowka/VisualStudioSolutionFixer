@@ -66,7 +66,7 @@ namespace VisualStudioSolutionFixer
                     if (Directory.Exists(command))
                     {
                         string targetPath = command;
-                        PrintToConsole(args[1], true);
+                        PrintToConsole(targetPath, true);
                         errorCode = 0;
                     }
                     else
@@ -98,7 +98,7 @@ namespace VisualStudioSolutionFixer
                                "                                and all subdirectories for Solution Files (SLN)\n" +
                                "                                updates all solution files. Prints the solution\n" +
                                "                                files that were fixed to the Console. ALWAYS Returns 0.");
-            message.AppendLine("validateDirectory [directory] - [READS] Spins through the specified directory\n" +
+            message.AppendLine("validatedirectory [directory] - [READS] Spins through the specified directory\n" +
                                "                                and all subdirectories for Solution Files (SLN)\n" +
                                "                                prints to the console invalid Solutions. Returns the\n" +
                                "                                number of invalid solution files.");
