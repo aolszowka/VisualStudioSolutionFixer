@@ -13,9 +13,9 @@ This tool will:
 
 If one of these files does not exist at the specified location the tool will:
 
-* Scan the same given directory for all CSPROJ/SYNPROJ/VBPROJ file names
+* Scan the same given directory for all CSPROJ/SYNPROJ/VBPROJ Projects
 * Load those into a lookup dictionary by their ProjectGuid
-    * This will throw an exception if the ProjectGuid is duplicated. To identify the issue see [https://github.com/aolszowka/MsBuildDuplicateProjectGuid] and to fix the issue see [https://github.com/aolszowka/MsBuildSetProjectGuid]
+    * This will throw an exception if the ProjectGuid is duplicated. To identify the issue see https://github.com/aolszowka/MsBuildDuplicateProjectGuid and to fix the issue see https://github.com/aolszowka/MsBuildSetProjectGuid
 * It will then update the Solution File with the correct relative path.
 
 Because the tooling operates on the ProjectGuid the name of the project can change completely so long as the project is found within the specified directory.
