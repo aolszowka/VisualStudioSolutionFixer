@@ -1,5 +1,5 @@
 # VisualStudioSolutionFixer
-Utility program to Validate or Visual Studio Fix Solution Files (SLN)
+Utility program to Validate or Fix Visual Studio Solution Files (SLN)
 
 ## When To Use This Tool
 This tool is intended to be used after you have done a massive source folder reorganization. The problem becomes now all of the relative paths to your Project Files are invalid in your Solution Files.
