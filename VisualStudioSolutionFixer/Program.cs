@@ -10,7 +10,7 @@ namespace VisualStudioSolutionFixer
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Text;
+    using VisualStudioSolutionFixer.Properties;
 
     class Program
     {
@@ -41,8 +41,7 @@ namespace VisualStudioSolutionFixer
                 {
                     if (args.Length < 2)
                     {
-                        string error = string.Format("You must provide a directory as a second argument to use validatedirectory");
-                        Console.WriteLine(error);
+                        Console.WriteLine(StringResources.NotEnoughDirectoryArguments);
                         errorCode = 1;
                     }
                     else
@@ -56,7 +55,7 @@ namespace VisualStudioSolutionFixer
                         }
                         else
                         {
-                            string error = string.Format("The provided directory `{0}` is invalid.", directoryArgument);
+                            string error = string.Format(StringResources.InvalidDirectoryArgument, directoryArgument);
                             errorCode = 9009;
                         }
                     }
@@ -71,7 +70,7 @@ namespace VisualStudioSolutionFixer
                     }
                     else
                     {
-                        string error = string.Format("The specified path `{0}` is not valid.", command);
+                        string error = string.Format(StringResources.InvalidDirectoryArgument, command);
                         Console.WriteLine(error);
                         errorCode = 1;
                     }
@@ -88,19 +87,7 @@ namespace VisualStudioSolutionFixer
 
         private static int ShowUsage()
         {
-            StringBuilder message = new StringBuilder();
-            message.AppendLine("Scans given directory for Solution Files (*.sln); Correcting their Project References.");
-            message.AppendLine("Invalid Command/Arguments. Valid commands are:");
-            message.AppendLine();
-            message.AppendLine("[directory]                   - [MODIFIES] Spins through the specified directory\n" +
-                               "                                and all subdirectories for Solution Files (SLN)\n" +
-                               "                                updates all solution files. Prints the solution\n" +
-                               "                                files that were fixed to the Console. ALWAYS Returns 0.");
-            message.AppendLine("validatedirectory [directory] - [READS] Spins through the specified directory\n" +
-                               "                                and all subdirectories for Solution Files (SLN)\n" +
-                               "                                prints to the console invalid Solutions. Returns the\n" +
-                               "                                number of invalid solution files.");
-            Console.WriteLine(message);
+            Console.WriteLine(StringResources.HelpTextMessage);
             return 21;
         }
 
