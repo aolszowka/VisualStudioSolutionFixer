@@ -1,6 +1,6 @@
 ﻿// -----------------------------------------------------------------------
 // <copyright file="Program.cs" company="Ace Olszowka">
-//  Copyright (c) Ace Olszowka 2018. All rights reserved.
+//  Copyright (c) Ace Olszowka 2018-2019. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
@@ -52,7 +52,7 @@ namespace VisualStudioSolutionFixer
 
                         if (Directory.Exists(directoryArgument))
                         {
-                            errorCode = PrintToConsole(args[1], false);
+                            errorCode = PrintToConsole(directoryArgument, false);
                         }
                         else
                         {
@@ -84,8 +84,6 @@ namespace VisualStudioSolutionFixer
             }
 
             Environment.Exit(errorCode);
-
-
         }
 
         private static int ShowUsage()
