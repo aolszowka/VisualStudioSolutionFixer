@@ -1,6 +1,6 @@
 ﻿// -----------------------------------------------------------------------
 // <copyright file="SolutionFixer.cs" company="Ace Olszowka">
-//  Copyright (c) Ace Olszowka 2018. All rights reserved.
+//  Copyright (c) Ace Olszowka 2018-2019. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ namespace VisualStudioSolutionFixer
 
     class SolutionFixer
     {
-        public static IEnumerable<(string SolutionFile, IReadOnlyDictionary<string, string> MissingProjects)> Execute(string targetDirectory, bool fixSolutions)
+        public static IEnumerable<(string SolutionFile, IReadOnlyDictionary<string, string> MissingProjects)> Execute(string targetDirectory, IEnumerable<string> lookupDirectories, bool fixSolutions)
         {
             IEnumerable<string> solutionsInDirectory = GetSolutionsInDirectory(targetDirectory);
             ConcurrentBag<(string SolutionFile, IReadOnlyDictionary<string, string> MissingProjects)> invalidSolutions = new ConcurrentBag<(string SolutionFile, IReadOnlyDictionary<string, string> MissingProjects)>();
@@ -38,7 +38,7 @@ namespace VisualStudioSolutionFixer
             {
                 // THIS PROCESS IS EXPENSIVE; AVOID AT ALL COSTS!
                 // At this point if we're going to fix the projects upload up our ProjectGuid Dictionary
-                IReadOnlyDictionary<string, string> projectGuidLookup = LoadProjectGuids(targetDirectory);
+                IReadOnlyDictionary<string, string> projectGuidLookup = LoadProjectGuids(lookupDirectories);
 
                 Parallel.ForEach(invalidSolutions, invalidSolution =>
                 {
@@ -119,22 +119,27 @@ namespace VisualStudioSolutionFixer
         }
 
         /// <summary>
-        /// Given a target directory spin for all project files (as defined by
+        /// Given a set of directories spin for all project files (as defined by
         /// <see cref="GetProjectsInDirectory(string)"/>).
         /// </summary>
-        /// <param name="targetDirectory">The directory to scan.</param>
+        /// <param name="lookupDirectories">The directory to scan.</param>
         /// <returns>
         /// <see cref="IDictionary{TKey, TValue}"/> where the <c>TKey</c> is
         /// the ProjectGuid and the <c>TValue</c> is the path to the project
         /// that contains that Guid.
         /// </returns>
-        internal static IReadOnlyDictionary<string, string> LoadProjectGuids(string targetDirectory)
+        internal static IReadOnlyDictionary<string, string> LoadProjectGuids(IEnumerable<string> lookupDirectories)
         {
-            IEnumerable<string> projFilesInDirectory = GetProjectsInDirectory(targetDirectory);
+            // These will be file paths which should be case insensitive on Windows.
+            IEnumerable<string> projFilesInLookupDirectories =
+                lookupDirectories
+                .AsParallel()
+                .SelectMany(currentLookupDirectory => GetProjectsInDirectory(currentLookupDirectory))
+                .Distinct(StringComparer.InvariantCultureIgnoreCase);
 
             ConcurrentDictionary<string, string> resultDictionary = new ConcurrentDictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
 
-            Parallel.ForEach(projFilesInDirectory, projFile =>
+            Parallel.ForEach(projFilesInLookupDirectories, projFile =>
             {
                 string projectGuid = MSBuildUtilities.GetMSBuildProjectGuid(projFile);
                 if (!resultDictionary.TryAdd(projectGuid, projFile))

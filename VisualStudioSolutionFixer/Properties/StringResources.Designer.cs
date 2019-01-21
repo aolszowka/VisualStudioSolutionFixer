@@ -61,14 +61,18 @@ namespace VisualStudioSolutionFixer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scans given directory for Solution Files (*.sln); Correcting their Project References.
+        ///   Looks up a localized string similar to Scans given directory for Solution Files (*.sln); correcting any invalid
+        ///references to projects within them using a lookup directory.
+        ///
         ///Invalid Command/Arguments. Valid commands are:
         ///
-        ///[directory]                   - [MODIFIES] Spins through the specified directory\n&quot; +
-        ///                                and all subdirectories for Solution Files (SLN)\n&quot; +
-        ///                                updates all solution files. Prints the solution\n&quot; +
-        ///                                files that were fixed to the Console. ALWAYS Returns 0.
-        ///validatedirectory [directo [rest of string was truncated]&quot;;.
+        ///directory [lookupDirectory]+
+        ///    [MODIFIES] Spins through the specified directory and all subdirectories for
+        ///    Solution Files (SLN) updates all solution files. Prints the solution files
+        ///    that were fixed to the Console. ALWAYS Returns 0.
+        ///
+        ///validatedirectory directory [lookupDirectory]+
+        ///    [READS] Spins through th [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string HelpTextMessage {
             get {
@@ -86,7 +90,7 @@ namespace VisualStudioSolutionFixer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must provide a directory to scan as well as the lookup directories..
+        ///   Looks up a localized string similar to You must provide a directory to scan.
         /// </summary>
         internal static string NotEnoughDirectoryArguments {
             get {

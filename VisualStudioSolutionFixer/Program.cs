@@ -22,7 +22,7 @@ namespace VisualStudioSolutionFixer
         /// and will attempt to update the solution file.
         /// 
         /// This program will throw an InvalidOperationException if the project
-        /// guid referenced in the Solution File cannot be found.
+        /// GUID referenced in the Solution File cannot be found.
         /// </summary>
         /// <param name="args">See <see cref="ShowUsage"/></param>
         static void Main(string[] args)
@@ -46,33 +46,46 @@ namespace VisualStudioSolutionFixer
                     }
                     else
                     {
-                        // The second argument is a directory
-                        string directoryArgument = args[1];
+                        bool allDirectoriesValid = true;
 
-                        if (Directory.Exists(directoryArgument))
+                        // Validate the Remaining Arguments
+                        foreach (string directoryArgument in args.Skip(1))
                         {
-                            errorCode = PrintToConsole(directoryArgument, false);
+                            allDirectoriesValid = allDirectoriesValid && IsValidDirectoryArgument(directoryArgument);
+                        }
+
+                        if (allDirectoriesValid)
+                        {
+                            // The Error Code should be the number of projects that would be modified
+                            errorCode = PrintToConsole(args.Skip(1), false);
                         }
                         else
                         {
-                            string error = string.Format(StringResources.InvalidDirectoryArgument, directoryArgument);
                             errorCode = 9009;
+                            Console.WriteLine(StringResources.OneOrMoreInvalidDirectories);
                         }
                     }
                 }
                 else
                 {
-                    if (Directory.Exists(command))
+                    bool allDirectoriesValid = true;
+
+                    // Validate the Remaining Arguments
+                    foreach (string directoryArgument in args.Skip(1))
                     {
-                        string targetPath = command;
-                        PrintToConsole(targetPath, true);
+                        allDirectoriesValid = allDirectoriesValid && IsValidDirectoryArgument(directoryArgument);
+                    }
+
+                    if (allDirectoriesValid)
+                    {
+                        PrintToConsole(args, true);
+                        // We always return zero if there was no exception
                         errorCode = 0;
                     }
                     else
                     {
-                        string error = string.Format(StringResources.InvalidDirectoryArgument, command);
-                        Console.WriteLine(error);
-                        errorCode = 1;
+                        errorCode = 9009;
+                        Console.WriteLine(StringResources.OneOrMoreInvalidDirectories);
                     }
                 }
             }
@@ -85,17 +98,43 @@ namespace VisualStudioSolutionFixer
             Environment.Exit(errorCode);
         }
 
+        private static bool IsValidDirectoryArgument(string directoryArgument)
+        {
+            bool isValidDirectory = true;
+
+            if (!Directory.Exists(directoryArgument))
+            {
+                Console.WriteLine(StringResources.InvalidDirectoryArgument, directoryArgument);
+                isValidDirectory = false;
+            }
+
+            return isValidDirectory;
+        }
+
         private static int ShowUsage()
         {
             Console.WriteLine(StringResources.HelpTextMessage);
             return 21;
         }
 
-        static int PrintToConsole(string targetDirectory, bool fixProjects)
+        /// <summary>
+        /// Print the result of the Visual Studio Solution Fix to the Console.
+        /// </summary>
+        /// <param name="directoryArguments">
+        /// An IEnumerable of directories to operate on; the first argument
+        /// is always the directory to be scanned/modified. Any remaining
+        /// arguments are additional directories used for lookups.
+        /// </param>
+        /// <param name="fixProjects">
+        /// Indicates whether or not to fix any invalid solutions.
+        /// </param>
+        /// <returns>The number of projects that were modified</returns>
+        static int PrintToConsole(IEnumerable<string> directoryArguments, bool fixProjects)
         {
             int brokenSolutionCount = 0;
+            string targetDirectory = directoryArguments.First();
 
-            IEnumerable<(string SolutionFile, IReadOnlyDictionary<string, string> MissingProjects)> invalidSolutions = SolutionFixer.Execute(targetDirectory, fixProjects);
+            IEnumerable<(string SolutionFile, IReadOnlyDictionary<string, string> MissingProjects)> invalidSolutions = SolutionFixer.Execute(targetDirectory, directoryArguments, fixProjects);
 
             foreach ((string SolutionFile, IReadOnlyDictionary<string, string> MissingProjects) invalidSolutionResult in invalidSolutions)
             {
