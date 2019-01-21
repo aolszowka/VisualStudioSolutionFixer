@@ -53,17 +53,16 @@ namespace VisualStudioSolutionFixer
         internal static IReadOnlyDictionary<string, string> EvaluateSolution(string targetSolution)
         {
             SolutionFile solutionFile = null;
+            Dictionary<string, string> invalidProjectReferences = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
 
             try
             {
                 solutionFile = SolutionFile.Parse(targetSolution);
             }
-            catch
+            catch (Exception ex)
             {
-                // Ignore these for now
+                invalidProjectReferences.Add(targetSolution, $"Failed To Load: {ex.Message}");
             }
-
-            Dictionary<string, string> invalidProjectReferences = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
 
             if (solutionFile != null)
             {
