@@ -68,7 +68,7 @@ namespace VisualStudioSolutionFixer
             {
                 foreach (ProjectInSolution project in solutionFile.ProjectsInOrder)
                 {
-                    if (project.ProjectType == SolutionProjectType.KnownToBeMSBuildFormat)
+                    if (project.ProjectType != SolutionProjectType.SolutionFolder)
                     {
                         if (!File.Exists(project.AbsolutePath))
                         {
