@@ -165,6 +165,7 @@ namespace VisualStudioSolutionFixer
             {
                 ".csproj",
                 ".fsproj",
+                ".sqlproj",
                 ".synproj",
                 ".vbproj",
             };
