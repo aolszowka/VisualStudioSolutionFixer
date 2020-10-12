@@ -1,6 +1,6 @@
 ﻿// -----------------------------------------------------------------------
 // <copyright file="Program.cs" company="Ace Olszowka">
-//  Copyright (c) Ace Olszowka 2018-2019. All rights reserved.
+//  Copyright (c) Ace Olszowka 2018-2020. All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
 
@@ -41,7 +41,7 @@ namespace VisualStudioSolutionFixer
                 {
                     if (args.Length < 2)
                     {
-                        Console.WriteLine(StringResources.NotEnoughDirectoryArguments);
+                        Console.WriteLine(Strings.NotEnoughDirectoryArguments);
                         errorCode = 1;
                     }
                     else
@@ -62,7 +62,7 @@ namespace VisualStudioSolutionFixer
                         else
                         {
                             errorCode = 9009;
-                            Console.WriteLine(StringResources.OneOrMoreInvalidDirectories);
+                            Console.WriteLine(Strings.OneOrMoreInvalidDirectories);
                         }
                     }
                 }
@@ -85,7 +85,7 @@ namespace VisualStudioSolutionFixer
                     else
                     {
                         errorCode = 9009;
-                        Console.WriteLine(StringResources.OneOrMoreInvalidDirectories);
+                        Console.WriteLine(Strings.OneOrMoreInvalidDirectories);
                     }
                 }
             }
@@ -104,7 +104,7 @@ namespace VisualStudioSolutionFixer
 
             if (!Directory.Exists(directoryArgument))
             {
-                Console.WriteLine(StringResources.InvalidDirectoryArgument, directoryArgument);
+                Console.WriteLine(Strings.InvalidDirectoryArgument, directoryArgument);
                 isValidDirectory = false;
             }
 
@@ -113,7 +113,7 @@ namespace VisualStudioSolutionFixer
 
         private static int ShowUsage()
         {
-            Console.WriteLine(StringResources.HelpTextMessage);
+            Console.WriteLine(Strings.HelpTextMessage);
             return 21;
         }
 
