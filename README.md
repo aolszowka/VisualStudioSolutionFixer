@@ -49,8 +49,6 @@ In all instances:
   many additional lookup directories as you want.
 * Any project that is invalid is written to the console.
 ```
-## License
-This tool is MIT Licensed.
 
 ## Hacking
 The most likely change you will want to make is changing the supported project files. In theory this tool should support any MSBuild Project Format that utilizes a ProjectGuid.
@@ -60,3 +58,9 @@ See SolutionFixer.GetProjectsInDirectory(string) for the place to modify this.
 Every attempt has been made to make this tool as fast as possible such that we should just be I/O Bound.
 
 Pull requests and bug reports are welcomed so long as they are MIT Licensed.
+
+## License
+This tool is MIT Licensed.
+
+## Third Party Licenses
+This project uses other open source contributions see [LICENSES.md](LICENSES.md) for a comprehensive listing.
