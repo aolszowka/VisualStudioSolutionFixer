@@ -61,22 +61,11 @@ namespace VisualStudioSolutionFixer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scans given directory for Solution Files (*.sln); correcting any invalid
-        ///references to projects within them using a lookup directory.
-        ///
-        ///Invalid Command/Arguments. Valid commands are:
-        ///
-        ///directory [lookupDirectory]+
-        ///    [MODIFIES] Spins through the specified directory and all subdirectories for
-        ///    Solution Files (SLN) updates all solution files. Prints the solution files
-        ///    that were fixed to the Console. ALWAYS Returns 0.
-        ///
-        ///validatedirectory directory [lookupDirectory]+
-        ///    [READS] Spins through th [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Show this message and exit.
         /// </summary>
-        internal static string HelpTextMessage {
+        internal static string HelpDescription {
             get {
-                return ResourceManager.GetString("HelpTextMessage", resourceCulture);
+                return ResourceManager.GetString("HelpDescription", resourceCulture);
             }
         }
         
@@ -90,11 +79,29 @@ namespace VisualStudioSolutionFixer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must provide a directory to scan.
+        ///   Looks up a localized string similar to Scans given directory for Solution Files (*.sln); verifying that each of the
+        ///referenced projects exists.
+        ///
+        ///Optionally correcting any invalid references to projects them using a lookup
+        ///directory. You can provide multiple lookup directories to this tool using any of
+        ///the directory lookup syntaxes.
+        ///
+        ///Invalid Project References are written to the console.
+        ///
+        ///Arguments:.
         /// </summary>
-        internal static string NotEnoughDirectoryArguments {
+        internal static string LongDescription {
             get {
-                return ResourceManager.GetString("NotEnoughDirectoryArguments", resourceCulture);
+                return ResourceManager.GetString("LongDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One or more directories to use to find projects, these directories are searched for projects to correct the paths in the Visual Studio Solution Files if the path is invalid. This argument is optional when run in validation mode..
+        /// </summary>
+        internal static string LookupDirectoryArgumentDescription {
+            get {
+                return ResourceManager.GetString("LookupDirectoryArgumentDescription", resourceCulture);
             }
         }
         
@@ -104,6 +111,43 @@ namespace VisualStudioSolutionFixer.Properties {
         internal static string OneOrMoreInvalidDirectories {
             get {
                 return ResourceManager.GetString("OneOrMoreInvalidDirectories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to VisualStudioSolutionFixer.
+        /// </summary>
+        internal static string ProgramName {
+            get {
+                return ResourceManager.GetString("ProgramName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Usage: VisualStudioSolutionFixer C:\DirectoryWithSolutions [-ld=C:\lookupDir]
+        ///                                 [-ld=C:\lookupDir2] [-validate].
+        /// </summary>
+        internal static string ShortUsageMessage {
+            get {
+                return ResourceManager.GetString("ShortUsageMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The directory to scan for Visual Studio Solutions.
+        /// </summary>
+        internal static string TargetDirectoryArgument {
+            get {
+                return ResourceManager.GetString("TargetDirectoryArgument", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Indicates if this tool should only be run in validation mode.
+        /// </summary>
+        internal static string ValidateDescription {
+            get {
+                return ResourceManager.GetString("ValidateDescription", resourceCulture);
             }
         }
     }

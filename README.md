@@ -25,29 +25,30 @@ Because the tooling operates on the ProjectGuid the name of the project can chan
 
 ## Usage
 ```
-Usage:
-VisualStudioSolutionFixer.exe [validateDirectory] directoryToOperateOn [lookupDirectory]+
+Usage: VisualStudioSolutionFixer C:\DirectoryWithSolutions [-ld=C:\lookupDir]
+                                 [-ld=C:\lookupDir2] [-validate]
 
-Scans given directory for Solution Files (*.sln); correcting any invalid
-references to projects within them using a lookup directory.
+Scans given directory for Solution Files (*.sln); verifying that each of the
+referenced projects exists.
 
-Invalid Command/Arguments. Valid commands are:
+Optionally correcting any invalid references to projects them using a lookup
+directory. You can provide multiple lookup directories to this tool using any of
+the directory lookup syntaxes.
 
-directory [lookupDirectory]+
-    [MODIFIES] Spins through the specified directory and all subdirectories for
-    Solution Files (SLN) updates all solution files. Prints the solution files
-    that were fixed to the Console. ALWAYS Returns 0.
+Invalid Project References are written to the console.
 
-validatedirectory directory [lookupDirectory]+
-    [READS] Spins through the specified directory and all subdirectories for
-    Solution Files (SLN) prints to the console invalid Solutions. Returns the
-    number of invalid solution files.
+Arguments:
 
-In all instances:
-* You can specify multiple directories to be used as "lookup directories"; the
-  given directory is always used as a lookup directory and you can specify as
-  many additional lookup directories as you want.
-* Any project that is invalid is written to the console.
+               <>            The directory to scan for Visual Studio Solutions
+      --lookupdirectory, --ld=VALUE
+                             One or more directories to use to find projects,
+                               these directories are searched for projects to
+                               correct the paths in the Visual Studio Solution
+                               Files if the path is invalid. This argument is
+                               optional when run in validation mode.
+      --validate             Indicates if this tool should only be run in
+                               validation mode
+  -?, -h, --help             Show this message and exit
 ```
 
 ## Hacking

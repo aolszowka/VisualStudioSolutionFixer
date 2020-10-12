@@ -117,35 +117,41 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="HelpTextMessage" xml:space="preserve">
-    <value>Scans given directory for Solution Files (*.sln); correcting any invalid
-references to projects within them using a lookup directory.
-
-Invalid Command/Arguments. Valid commands are:
-
-directory [lookupDirectory]+
-    [MODIFIES] Spins through the specified directory and all subdirectories for
-    Solution Files (SLN) updates all solution files. Prints the solution files
-    that were fixed to the Console. ALWAYS Returns 0.
-
-validatedirectory directory [lookupDirectory]+
-    [READS] Spins through the specified directory and all subdirectories for
-    Solution Files (SLN) prints to the console invalid Solutions. Returns the
-    number of invalid solution files.
-
-In all instances:
-* You can specify multiple directories to be used as "lookup directories"; the
-  given directory is always used as a lookup directory and you can specify as
-  many additional lookup directories as you want.
-* Any project that is invalid is written to the console.</value>
+  <data name="HelpDescription" xml:space="preserve">
+    <value>Show this message and exit</value>
   </data>
   <data name="InvalidDirectoryArgument" xml:space="preserve">
     <value>The provided directory `{0}` is invalid.</value>
   </data>
-  <data name="NotEnoughDirectoryArguments" xml:space="preserve">
-    <value>You must provide a directory to scan</value>
+  <data name="LongDescription" xml:space="preserve">
+    <value>Scans given directory for Solution Files (*.sln); verifying that each of the
+referenced projects exists.
+
+Optionally correcting any invalid references to projects them using a lookup
+directory. You can provide multiple lookup directories to this tool using any of
+the directory lookup syntaxes.
+
+Invalid Project References are written to the console.
+
+Arguments:</value>
+  </data>
+  <data name="LookupDirectoryArgumentDescription" xml:space="preserve">
+    <value>One or more directories to use to find projects, these directories are searched for projects to correct the paths in the Visual Studio Solution Files if the path is invalid. This argument is optional when run in validation mode.</value>
   </data>
   <data name="OneOrMoreInvalidDirectories" xml:space="preserve">
     <value>One or more of the directories specified was invalid (see above).</value>
+  </data>
+  <data name="ProgramName" xml:space="preserve">
+    <value>VisualStudioSolutionFixer</value>
+  </data>
+  <data name="ShortUsageMessage" xml:space="preserve">
+    <value>Usage: VisualStudioSolutionFixer C:\DirectoryWithSolutions [-ld=C:\lookupDir]
+                                 [-ld=C:\lookupDir2] [-validate]</value>
+  </data>
+  <data name="TargetDirectoryArgument" xml:space="preserve">
+    <value>The directory to scan for Visual Studio Solutions</value>
+  </data>
+  <data name="ValidateDescription" xml:space="preserve">
+    <value>Indicates if this tool should only be run in validation mode</value>
   </data>
 </root>

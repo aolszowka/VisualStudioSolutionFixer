@@ -9,7 +9,9 @@ namespace VisualStudioSolutionFixer
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
+
+    using NDesk.Options;
+
     using VisualStudioSolutionFixer.Properties;
 
     class Program
@@ -20,82 +22,90 @@ namespace VisualStudioSolutionFixer
         /// projects exist at the specified location. If it does not it will
         /// attempt to scan that same directory for any CSPROJ/SYNPROJ/VBPROJ
         /// and will attempt to update the solution file.
-        /// 
+        ///
         /// This program will throw an InvalidOperationException if the project
         /// GUID referenced in the Solution File cannot be found.
         /// </summary>
         /// <param name="args">See <see cref="ShowUsage"/></param>
         static void Main(string[] args)
         {
-            int errorCode = 0;
+            string targetDirectory = string.Empty;
+            bool validateOnly = false;
+            bool showHelp = false;
+            List<string> lookupDirectories = new List<string>();
 
-            if (args.Any())
+            OptionSet p = new OptionSet()
             {
-                string command = args.First().ToLowerInvariant();
+                { "<>", Strings.TargetDirectoryArgument, v => targetDirectory = v },
+                { "lookupdirectory=|ld=", Strings.LookupDirectoryArgumentDescription, v => lookupDirectories.Add(v) },
+                { "validate", Strings.ValidateDescription, v => validateOnly = v != null },
+                { "?|h|help", Strings.HelpDescription, v => showHelp = v != null },
+            };
 
-                if (command.Equals("-?") || command.Equals("/?") || command.Equals("-help") || command.Equals("/help"))
-                {
-                    errorCode = ShowUsage();
-                }
-                else if (command.Equals("validatedirectory"))
-                {
-                    if (args.Length < 2)
-                    {
-                        Console.WriteLine(Strings.NotEnoughDirectoryArguments);
-                        errorCode = 1;
-                    }
-                    else
-                    {
-                        bool allDirectoriesValid = true;
+            try
+            {
+                p.Parse(args);
+            }
+            catch (OptionException)
+            {
+                Console.WriteLine(Strings.ShortUsageMessage);
+                Console.WriteLine($"Try `{Strings.ProgramName} --help` for more information.");
+                Environment.Exit(21);
+            }
 
-                        // Validate the Remaining Arguments
-                        foreach (string directoryArgument in args.Skip(1))
-                        {
-                            allDirectoriesValid = allDirectoriesValid && IsValidDirectoryArgument(directoryArgument);
-                        }
-
-                        if (allDirectoriesValid)
-                        {
-                            // The Error Code should be the number of projects that would be modified
-                            errorCode = PrintToConsole(args.Skip(1), false);
-                        }
-                        else
-                        {
-                            errorCode = 9009;
-                            Console.WriteLine(Strings.OneOrMoreInvalidDirectories);
-                        }
-                    }
-                }
-                else
+            if (showHelp || string.IsNullOrEmpty(targetDirectory))
+            {
+                int exitCode = ShowUsage(p);
+                Environment.Exit(exitCode);
+            }
+            else
+            {
+                // First Ensure that all Directories are Valid
+                if (IsValidDirectoryArgument(targetDirectory))
                 {
                     bool allDirectoriesValid = true;
 
                     // Validate the Remaining Arguments
-                    foreach (string directoryArgument in args.Skip(1))
+                    foreach (string directoryArgument in lookupDirectories)
                     {
                         allDirectoriesValid = allDirectoriesValid && IsValidDirectoryArgument(directoryArgument);
                     }
 
                     if (allDirectoriesValid)
                     {
-                        PrintToConsole(args, true);
-                        // We always return zero if there was no exception
-                        errorCode = 0;
+                        bool saveChanges = validateOnly == false;
+
+                        Environment.ExitCode = PrintToConsole(targetDirectory, lookupDirectories, saveChanges);
+
+                        if (saveChanges)
+                        {
+                            // Always Return Zero
+                            Environment.ExitCode = 0;
+                        }
                     }
                     else
                     {
-                        errorCode = 9009;
+                        Environment.ExitCode = -1;
                         Console.WriteLine(Strings.OneOrMoreInvalidDirectories);
                     }
                 }
+                else
+                {
+                    Environment.ExitCode = -1;
+                    Console.WriteLine(Strings.OneOrMoreInvalidDirectories);
+                }
             }
-            else
-            {
-                // This was a bad command
-                errorCode = ShowUsage();
-            }
+        }
 
-            Environment.Exit(errorCode);
+        private static int ShowUsage(OptionSet p)
+        {
+            Console.WriteLine(Strings.ShortUsageMessage);
+            Console.WriteLine();
+            Console.WriteLine(Strings.LongDescription);
+            Console.WriteLine();
+            Console.WriteLine($"               <>            {Strings.TargetDirectoryArgument}");
+            p.WriteOptionDescriptions(Console.Out);
+            return 21;
         }
 
         private static bool IsValidDirectoryArgument(string directoryArgument)
@@ -111,30 +121,18 @@ namespace VisualStudioSolutionFixer
             return isValidDirectory;
         }
 
-        private static int ShowUsage()
-        {
-            Console.WriteLine(Strings.HelpTextMessage);
-            return 21;
-        }
-
         /// <summary>
         /// Print the result of the Visual Studio Solution Fix to the Console.
         /// </summary>
-        /// <param name="directoryArguments">
-        /// An IEnumerable of directories to operate on; the first argument
-        /// is always the directory to be scanned/modified. Any remaining
-        /// arguments are additional directories used for lookups.
-        /// </param>
-        /// <param name="fixProjects">
-        /// Indicates whether or not to fix any invalid solutions.
-        /// </param>
+        /// <param name="targetDirectory">Directory to scan for Solution Files</param>
+        /// <param name="lookupDirectories">Directories to be used for lookups in fix mode</param>
+        /// <param name="fixProjects">Indicates whether or not to fix any invalid solutions.</param>
         /// <returns>The number of projects that were modified</returns>
-        static int PrintToConsole(IEnumerable<string> directoryArguments, bool fixProjects)
+        static int PrintToConsole(string targetDirectory, IEnumerable<string> lookupDirectories, bool fixProjects)
         {
             int brokenSolutionCount = 0;
-            string targetDirectory = directoryArguments.First();
 
-            IEnumerable<(string SolutionFile, IReadOnlyDictionary<string, string> MissingProjects)> invalidSolutions = SolutionFixer.Execute(targetDirectory, directoryArguments, fixProjects);
+            IEnumerable<(string SolutionFile, IReadOnlyDictionary<string, string> MissingProjects)> invalidSolutions = SolutionFixer.Execute(targetDirectory, lookupDirectories, fixProjects);
 
             foreach ((string SolutionFile, IReadOnlyDictionary<string, string> MissingProjects) invalidSolutionResult in invalidSolutions)
             {
