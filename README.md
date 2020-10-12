@@ -25,32 +25,31 @@ Because the tooling operates on the ProjectGuid the name of the project can chan
 
 ## Usage
 ```
-Usage:
-VisualStudioSolutionFixer.exe [validateDirectory] directoryToOperateOn [lookupDirectory]+
+Usage: VisualStudioSolutionFixer C:\DirectoryWithSolutions [-ld=C:\lookupDir]
+                                 [-ld=C:\lookupDir2] [-validate]
 
-Scans given directory for Solution Files (*.sln); correcting any invalid
-references to projects within them using a lookup directory.
+Scans given directory for Solution Files (*.sln); verifying that each of the
+referenced projects exists.
 
-Invalid Command/Arguments. Valid commands are:
+Optionally correcting any invalid references to projects them using a lookup
+directory. You can provide multiple lookup directories to this tool using any of
+the directory lookup syntaxes.
 
-directory [lookupDirectory]+
-    [MODIFIES] Spins through the specified directory and all subdirectories for
-    Solution Files (SLN) updates all solution files. Prints the solution files
-    that were fixed to the Console. ALWAYS Returns 0.
+Invalid Project References are written to the console.
 
-validatedirectory directory [lookupDirectory]+
-    [READS] Spins through the specified directory and all subdirectories for
-    Solution Files (SLN) prints to the console invalid Solutions. Returns the
-    number of invalid solution files.
+Arguments:
 
-In all instances:
-* You can specify multiple directories to be used as "lookup directories"; the
-  given directory is always used as a lookup directory and you can specify as
-  many additional lookup directories as you want.
-* Any project that is invalid is written to the console.
+               <>            The directory to scan for Visual Studio Solutions
+      --lookupdirectory, --ld=VALUE
+                             One or more directories to use to find projects,
+                               these directories are searched for projects to
+                               correct the paths in the Visual Studio Solution
+                               Files if the path is invalid. This argument is
+                               optional when run in validation mode.
+      --validate             Indicates if this tool should only be run in
+                               validation mode
+  -?, -h, --help             Show this message and exit
 ```
-## License
-This tool is MIT Licensed.
 
 ## Hacking
 The most likely change you will want to make is changing the supported project files. In theory this tool should support any MSBuild Project Format that utilizes a ProjectGuid.
@@ -60,3 +59,9 @@ See SolutionFixer.GetProjectsInDirectory(string) for the place to modify this.
 Every attempt has been made to make this tool as fast as possible such that we should just be I/O Bound.
 
 Pull requests and bug reports are welcomed so long as they are MIT Licensed.
+
+## License
+This tool is MIT Licensed.
+
+## Third Party Licenses
+This project uses other open source contributions see [LICENSES.md](LICENSES.md) for a comprehensive listing.
