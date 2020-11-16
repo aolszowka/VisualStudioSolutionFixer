@@ -13,6 +13,7 @@ namespace VisualStudioSolutionFixer
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+
     using Microsoft.Build.Construction;
 
     class SolutionFixer
@@ -83,7 +84,7 @@ namespace VisualStudioSolutionFixer
 
         private static void FixSolution(string solutionPath, IReadOnlyDictionary<string, string> invalidProjectReferences, IReadOnlyDictionary<string, string> lookupDictionary)
         {
-            string solutionFilePath = PathUtilities.AddTrailingSlash(Path.GetDirectoryName(solutionPath));
+            string solutionFilePath = Path.GetDirectoryName(solutionPath);
 
             // Load up the target solution into memory
             string solutionContent = File.ReadAllText(solutionPath);
@@ -95,13 +96,13 @@ namespace VisualStudioSolutionFixer
                 // First lookup the Guid of the Invalid Project
                 if (!lookupDictionary.TryGetValue(invalidProjectReference.Key, out validProjectFullPath))
                 {
-                    string expandedOldProjectPath = PathUtilities.ResolveRelativePath(solutionPath, invalidProjectReference.Value);
+                    string expandedOldProjectPath = Path.GetFullPath(solutionPath, invalidProjectReference.Value);
                     string exception = $"In Solution `{solutionPath}` Project with Guid `{invalidProjectReference.Key}` was not found in lookup dictionary. Previously existed at `{expandedOldProjectPath}`";
                     throw new InvalidOperationException(exception);
                 }
 
                 // At this point we have the new Valid Full Path, convert this to a relative path to the solution
-                string relativeValidPath = PathUtilities.GetRelativePath(solutionFilePath, validProjectFullPath);
+                string relativeValidPath = Path.GetRelativePath(validProjectFullPath, solutionFilePath).Replace(Path.DirectorySeparatorChar, '\\');
 
                 // Now we need to do the find and replace
                 solutionContent = solutionContent.Replace(invalidProjectReference.Value, relativeValidPath);
