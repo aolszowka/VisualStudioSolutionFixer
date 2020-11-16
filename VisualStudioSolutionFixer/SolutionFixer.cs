@@ -102,7 +102,7 @@ namespace VisualStudioSolutionFixer
                 }
 
                 // At this point we have the new Valid Full Path, convert this to a relative path to the solution
-                string relativeValidPath = Path.GetRelativePath(validProjectFullPath, solutionFilePath).Replace(Path.DirectorySeparatorChar, '\\');
+                string relativeValidPath = Path.GetRelativePath(solutionFilePath, validProjectFullPath).Replace(Path.DirectorySeparatorChar, '\\');
 
                 // Now we need to do the find and replace
                 solutionContent = solutionContent.Replace(invalidProjectReference.Value, relativeValidPath);
