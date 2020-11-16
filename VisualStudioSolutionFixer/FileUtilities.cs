@@ -14,7 +14,7 @@ namespace VisualStudioSolutionFixer
     /// </summary>
     public static class FileUtilities
     {
-        private static byte[] UTF8BOM = new byte[] { 0xEF, 0xBB, 0xBF };
+        private static readonly byte[] UTF8BOM = new byte[] { 0xEF, 0xBB, 0xBF };
 
         /// <summary>
         /// Determines if the given file contains the UTF-8 BOM (0xEF,0xBB,0xBF).

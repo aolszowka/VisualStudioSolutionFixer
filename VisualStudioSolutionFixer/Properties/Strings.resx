@@ -141,11 +141,8 @@ Arguments:</value>
   <data name="OneOrMoreInvalidDirectories" xml:space="preserve">
     <value>One or more of the directories specified was invalid (see above).</value>
   </data>
-  <data name="ProgramName" xml:space="preserve">
-    <value>VisualStudioSolutionFixer</value>
-  </data>
   <data name="ShortUsageMessage" xml:space="preserve">
-    <value>Usage: VisualStudioSolutionFixer C:\DirectoryWithSolutions [-ld=C:\lookupDir]
+    <value>Usage: C:\DirectoryWithSolutions [-ld=C:\lookupDir]
                                  [-ld=C:\lookupDir2] [-validate]</value>
   </data>
   <data name="TargetDirectoryArgument" xml:space="preserve">

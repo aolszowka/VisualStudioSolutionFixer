@@ -1,5 +1,7 @@
 # VisualStudioSolutionFixer
-Utility program to Validate or Visual Studio Fix Solution Files (SLN) Referenced Projects.
+![CI - Master](https://github.com/aolszowka/VisualStudioSolutionFixer/workflows/CI/badge.svg?branch=master)
+
+Utility program to Validate or Fix Visual Studio Fix Solution Files (SLN) Referenced Projects.
 
 ## When To Use This Tool
 This tool is intended to be used after you have done a massive source folder reorganization. The problem becomes now all of the relative paths to your Project Files are invalid in your Solution Files.
@@ -24,8 +26,15 @@ Because the tooling operates on the ProjectGuid the name of the project can chan
 **NOTE** This tool will only fix Solution Files; you most likely need to fix all of the Project Files as well. For that see the sister tool https://github.com/aolszowka/MsBuildProjectReferenceFixer
 
 ## Usage
+There are now two ways to run this tool:
+
+1. (Compiled Executable) Invoke the tool via `VisualStudioSolutionFixer` and pass the arguments.
+2. (Dotnet Tool) Install this tool using the following command `dotnet tool install VisualStudioSolutionFixer` (assuming that you have the nuget package in your feed) then invoke it via `dotnet solution-fixprojects`
+
+In both cases the flags to the tooling are identical:
+
 ```
-Usage: VisualStudioSolutionFixer C:\DirectoryWithSolutions [-ld=C:\lookupDir]
+Usage: C:\DirectoryWithSolutions [-ld=C:\lookupDir]
                                  [-ld=C:\lookupDir2] [-validate]
 
 Scans given directory for Solution Files (*.sln); verifying that each of the

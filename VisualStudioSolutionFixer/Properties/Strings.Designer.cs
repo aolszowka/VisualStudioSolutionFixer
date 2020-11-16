@@ -115,16 +115,7 @@ namespace VisualStudioSolutionFixer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to VisualStudioSolutionFixer.
-        /// </summary>
-        internal static string ProgramName {
-            get {
-                return ResourceManager.GetString("ProgramName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Usage: VisualStudioSolutionFixer C:\DirectoryWithSolutions [-ld=C:\lookupDir]
+        ///   Looks up a localized string similar to Usage: C:\DirectoryWithSolutions [-ld=C:\lookupDir]
         ///                                 [-ld=C:\lookupDir2] [-validate].
         /// </summary>
         internal static string ShortUsageMessage {
